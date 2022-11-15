@@ -5,6 +5,9 @@
     <title>Hello</title>
 </head>
 <body>
-<p>Hello {{ name }}!</p>
+    <form action="/greet" method="get">
+       Name: <input name="name" autocomplete="off" autofocus="on" type="text"/>
+        <input type="submit"/>
+    </form>
 </body>
 </html>
