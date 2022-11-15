@@ -8,9 +8,9 @@ def hello_world():  # put application's code here
     return render_template('index.html')
 
 
-@app.route('/greet')
+@app.route('/greet', methods=['POST'])
 def greet():  # put application's code here
-    return render_template('greet.html', name=request.args.get("name", "rav"))
+    return render_template('greet.html', name=request.form.get("name", "rav"))
 
 
 if __name__ == '__main__':
