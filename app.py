@@ -1,16 +1,20 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
+import sqlite3
 
 app = Flask(__name__)
 
-REGISTRANTS = {
-
-}
 SPORTS = [
     "Football",
     "Rugby",
     "Volleyball",
     "Basketball",
 ]
+
+
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -28,10 +32,16 @@ def register():
         return render_template("failure.html", message="Missing sport")
     if sport not in SPORTS:
         return render_template("failure.html", message="Invalid sport")
+    conn = get_db_connection()
+    conn.execute("INSERT INTO registrants(name, sport) VALUES (?, ?)", name, sport)
+    return redirect("/registrants")
 
-    REGISTRANTS[name] = sport
-    print(REGISTRANTS)
-    return render_template("registrants.html", registrants=REGISTRANTS)
+
+@app.route("/registrants")
+def registrants():
+    conn = get_db_connection()
+    registrants = conn.execute('SELECT * FROM registrants')
+    return render_template("registrants.html", registrants=registrants)
 
 
 if __name__ == '__main__':
