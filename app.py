@@ -31,7 +31,7 @@ def register():
 
     REGISTRANTS[name] = sport
     print(REGISTRANTS)
-    return render_template("success.html")
+    return render_template("registrants.html", registrants=REGISTRANTS)
 
 
 if __name__ == '__main__':
