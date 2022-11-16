@@ -17,6 +17,9 @@ def get_db_connection():
     return conn
 
 
+conn = get_db_connection()
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     return render_template("index.html", sports=SPORTS)
@@ -32,14 +35,12 @@ def register():
         return render_template("failure.html", message="Missing sport")
     if sport not in SPORTS:
         return render_template("failure.html", message="Invalid sport")
-    conn = get_db_connection()
-    conn.execute("INSERT INTO registrants(name, sport) VALUES (?, ?)", name, sport)
+    conn.execute("INSERT INTO registrants(name, sport) VALUES(?, ?)", name, sport)
     return redirect("/registrants")
 
 
 @app.route("/registrants")
 def registrants():
-    conn = get_db_connection()
     registrants = conn.execute('SELECT * FROM registrants')
     return render_template("registrants.html", registrants=registrants)
 
